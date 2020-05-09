@@ -1,4 +1,4 @@
-<h1> New Article </h1>
+<h1> Edit Article </h1>
 
   <% if @article.errors.any? %>
   <div id="error_explanation">
@@ -25,26 +25,8 @@
   </p>
 
   <p>
-    <%= form.submit "Save Article" %>
+    <%= form.submit "Edit Article" %>
   </p>
 <% end %>
 
-<%= link_to "Back", root_path %>
-
-
-prvicen kod:
-<form action="/articles" method="post">
-  <p>
-    <label for="title"> Title </label><br>
-    <input type="text" id="title" name="title" />
-  </p>
-
-  <p>
-    <label for="body"> Body </label><br>
-    <textarea id="body" name="body"></textarea>
-  </p>
-
-  <p>
-    <input type="submit" value="Save Article" />
-  </p>
-</form>
+<%= link_to "Back", articles_path %>
