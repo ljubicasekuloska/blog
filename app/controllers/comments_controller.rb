@@ -5,10 +5,13 @@ class CommentsController < ApplicationController
   end
 
   def create
-    article = Article.find(params[:article_id])
-    comment = article.comments.build(comment_prams)
-    comment.save
-    redirect_to article
+    @article = Article.find(params[:article_id])
+    @comment = @article.comments.build(comment_prams)
+    if @comment.save
+      redirect_to @article
+    else
+      render :new
+    end
   end
 
   def destroy
