@@ -10,11 +10,13 @@ class ArticlesController < ApplicationController
   end
 
   def new
+    session_notice(:danger, 'You must be logged in!') unless logged_in?
     @article = Article.new
   end
 
   def create
     @article = Article.new(article_params)
+    @article.user = current_user
 
     if @article.save
       redirect_to @article #"articles/#{article.id}"
@@ -25,7 +27,9 @@ class ArticlesController < ApplicationController
   end
 
   def edit
+    session_notice(:danger, 'You must be logged in!') unless logged_in?
     @article = Article.find(params[:id])
+    session_notice(:danger, 'Wrong User') unless equal_with_current_user?(@article.user)
   end
 
   def update
@@ -39,10 +43,15 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
+    session_notice(:danger, 'You must be logged in!') unless logged_in?
     article = Article.find(params[:id])
-    article.destroy
 
-    redirect_to articles_path
+    if equal_with_current_user?(article.user)
+      article.destroy
+      redirect_to articles_path
+    else
+      session_notice(:danger, 'Wrong User')
+    end
   end
 
   private
