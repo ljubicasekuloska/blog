@@ -45,7 +45,7 @@ require 'rails_helper'
        it { is_expected.to validate_uniqueness_of(:email) }
      end
 
-     it { is_expected.to validate_length_of(:password).is_at_least(User::MINIMUM_PASSWORD_LENGTH) }
+     it { is_expected.to validate_length_of(:password).is_at_least(User::MINIMUM_PASSWORD_LENGHT) }
      it { is_expected.to validate_length_of(:name).is_at_most(User::MAXIMUM_NAME_LENGTH) }
      it { is_expected.to validate_length_of(:email).is_at_most(User::MAXIMUM_EMAIL_LENGTH) }
 
