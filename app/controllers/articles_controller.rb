@@ -45,14 +45,17 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
-    session_notice(:danger, 'You must be logged in!') unless logged_in?
+    unless logged_in?
+      session_notice(:danger, 'You must be logged in!') and return
+    end
+
     article = Article.find(params[:id])
 
     if equal_with_current_user?(article.user)
       article.destroy
       redirect_to articles_path
     else
-      session_notice(:danger, 'Wrong User')
+      session_notice(:danger, 'Wrong User') and return
     end
   end
 
