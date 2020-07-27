@@ -29,16 +29,7 @@ require 'rails_helper'
          get '/login'
          expect(response).to have_http_status(:ok)
 
-         post_params = {
-           params: {
-             session: {
-               email: user.email,
-               password: user.password
-             }
-           }
-         }
-
-         post '/login', post_params
+         log_in(user)
 
          follow_redirect!
          expect(flash[:success]).to eq "Welcome #{user.name} !"
@@ -75,19 +66,9 @@ require 'rails_helper'
 
        let(:login_user) { create(:user) }
 
-       it 'redirect back when GET edit' do
-         get '/login'
+        before { log_in(login_user) }
 
-         post_params = {
-           params: {
-             session: {
-               email: login_user.email,
-               password: login_user.password
-             }
-           }
-         }
-
-         post '/login', post_params
+        it 'redirect back when GET edit' do
 
          get "/articles/#{article.id}/edit"
 
@@ -96,18 +77,6 @@ require 'rails_helper'
        end
 
        it 'redirect back when PATCH edit' do
-         get '/login'
-
-         post_params = {
-           params: {
-             session: {
-               email: login_user.email,
-               password: login_user.password
-             }
-           }
-         }
-
-         post '/login', post_params
 
          patch_params = {
            params: {
@@ -159,24 +128,11 @@ require 'rails_helper'
        let(:article) { create(:article, user: user) }
 
        it 'can delete the article' do
-         get '/login'
+        log_in(user)
 
-         post_params = {
-           params: {
-             session: {
-               email: user.email,
-               password: user.password
-             }
-           }
-         }
+        delete "/articles/#{article.id}"
 
-         post '/login', post_params
-
-         follow_redirect!
-
-         delete "/articles/#{article.id}"
-
-         expect(response).to redirect_to(articles_path)
+        expect(response).to redirect_to(articles_path)
        end
      end
 
@@ -187,20 +143,7 @@ require 'rails_helper'
        let(:login_user) { create(:user) }
 
        it 'redirect back to root path' do
-         get '/login'
-
-         post_params = {
-           params: {
-             session: {
-               email: login_user.email,
-               password: login_user.password
-             }
-           }
-         }
-
-         post '/login', post_params
-
-         follow_redirect!
+         log_in(login_user)
 
          delete "/articles/#{article.id}"
 
