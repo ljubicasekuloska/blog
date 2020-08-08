@@ -1,12 +1,14 @@
 class ArticlesController < ApplicationController
   skip_before_action :require_login, only: %i[index show]
   before_action :find_article, except: %i[index new create]
+  before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
     @articles = Article.all
   end
 
-  def show; end
+  def show
+  end
 
   def new
     @article = Article.new
@@ -25,18 +27,9 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    unless equal_with_current_user?(@article.user)
-      flash[:danger] = 'Wrong User'
-      redirect_to(root_path) && return
-    end
   end
 
   def update
-    unless equal_with_current_user?(@article.user)
-      flash[:danger] = 'Wrong User'
-      redirect_to(root_path) && return
-    end
-
     if @article.update(article_params)
       redirect_to @article
     else
@@ -45,13 +38,8 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
-    if equal_with_current_user?(@article.user)
-      @article.destroy
-      redirect_to articles_path
-    else
-      flash[:danger] = 'Wrong User'
-      redirect_to(root_path)
-    end
+    @article.destroy
+    redirect_to articles_path
   end
 
   private
@@ -62,5 +50,12 @@ class ArticlesController < ApplicationController
 
   def find_article
     @article = Article.find(params[:id])
+  end
+
+  def correct_user
+    unless equal_with_current_user?(@article.user)
+      flash[:danger] = 'Wrong User'
+      redirect_to(root_path)
+    end
   end
 end
