@@ -15,7 +15,7 @@ require 'rails_helper'
          post '/articles', post_params
 
          expect(response).to redirect_to(login_path)
-         expect(flash[:danger]).to eq 'You must be logged in!'
+         expect(flash[:danger]).to eq 'Please sign in to continue.'
        end
      end
    end
@@ -69,7 +69,6 @@ require 'rails_helper'
         before { log_in(login_user) }
 
         it 'redirect back when GET edit' do
-
          get "/articles/#{article.id}/edit"
 
          expect(flash[:danger]).to eq 'Wrong User'
@@ -77,7 +76,6 @@ require 'rails_helper'
        end
 
        it 'redirect back when PATCH edit' do
-
          patch_params = {
            params: {
              article: {
@@ -100,8 +98,8 @@ require 'rails_helper'
        it 'redirect back to root path' do
          get "/articles/#{article.id}/edit"
 
-         expect(flash[:danger]).to eq 'You must be logged in!'
-         expect(response).to redirect_to(root_path)
+         expect(flash[:danger]).to eq 'Please sign in to continue.'
+         expect(response).to redirect_to(login_path)
        end
 
        it 'redirect back to root when updating an article' do
@@ -116,8 +114,8 @@ require 'rails_helper'
 
          patch "/articles/#{article.id}", patch_params
 
-         expect(flash[:danger]).to eq 'You must be logged in!'
-         expect(response).to redirect_to(root_path)
+         expect(flash[:danger]).to eq 'Please sign in to continue.'
+         expect(response).to redirect_to(login_path)
        end
      end
    end
@@ -158,8 +156,8 @@ require 'rails_helper'
        it 'redirect back to root path' do
          delete "/articles/#{article.id}"
 
-         expect(flash[:danger]).to eq 'You must be logged in!'
-         expect(response).to redirect_to(root_path)
+         expect(flash[:danger]).to eq 'Please sign in to continue.'
+         expect(response).to redirect_to(login_path)
        end
      end
    end
